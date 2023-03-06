@@ -1,10 +1,10 @@
 package com.example.person.controller;
 
 
-import com.example.person.persistence.dto.PersonPostReqBody;
-import com.example.person.persistence.dto.PersonRespBody;
 import com.example.person.gateway.PersonGateway;
 import com.example.person.persistence.Person;
+import com.example.person.persistence.dto.PersonPostReqBody;
+import com.example.person.persistence.dto.PersonRespBody;
 import com.example.person.usecases.FindByPeopleId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PersonPutReqBody {
-
+    private Long id;
     private String cpf;
     private String name;
     private String rg;

@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PersonPostReqBody {
-
     private String cpf;
     private String name;
     private String rg;

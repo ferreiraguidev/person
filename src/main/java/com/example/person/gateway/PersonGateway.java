@@ -2,6 +2,7 @@ package com.example.person.gateway;
 
 
 import com.example.person.client.AddressClient;
+import com.example.person.handler.CouldNotFindPersonException;
 import com.example.person.persistence.Person;
 import com.example.person.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class PersonGateway {
 
     public Person findById(final Long id) {
         return personRepository.findById(id)
-                .orElseThrow(() -> new NullPointerException("Impossível salvar um endereço sem relaciona-lo com" +
-                        "uma pessoa! ID NULO!"));
+                .orElseThrow(() -> new CouldNotFindPersonException("Impossível salvar um endereço sem relaciona-lo com" +
+                        "uma pessoa!"));
     }
 }
