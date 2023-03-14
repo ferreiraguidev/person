@@ -2,6 +2,7 @@ package com.example.person.controller;
 
 import com.example.person.gateway.PersonGateway;
 import com.example.person.util.PersonCreator;
+import com.example.person.util.PersonPostReqBodyCreator;
 import lombok.val;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 import static com.example.person.util.PersonCreator.createValidPerson;
+import static com.example.person.util.PersonCreator.createValidPersonReqBody;
+import static com.example.person.util.PersonPostReqBodyCreator.createPersonPostReqBody;
 
 
 @ExtendWith(SpringExtension.class)
@@ -61,5 +64,25 @@ class PersonControllerTest {
                 .isNotNull();
 
         Assertions.assertThat(person.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
+    @Test
+    @DisplayName("findById returns person when successful")
+    void findById_ReturnsAnime_WhenSuccessful(){
+        val expectedId = createValidPerson().getId();
+
+        val person = personController.findById(1L);
+
+        Assertions.assertThat(person).isNotNull();
+
+        Assertions.assertThat(person.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
+    @Test
+    @DisplayName("save returns person when successful")
+    void save_ReturnsPerson_WhenSuccessful(){
+        val person = personController.save(createPersonPostReqBody());
+
+        Assertions.assertThat(person).isEqualTo(createValidPerson());
     }
 }

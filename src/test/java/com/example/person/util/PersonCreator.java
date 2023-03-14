@@ -1,6 +1,7 @@
 package com.example.person.util;
 
 import com.example.person.persistence.Person;
+import com.example.person.persistence.dto.PersonPostReqBody;
 
 public class PersonCreator {
 
@@ -20,6 +21,15 @@ public class PersonCreator {
                 .email("fgfff@gmail.com")
                 .name("krokv")
                 .id(1L)
+                .build();
+    }
+
+    public static PersonPostReqBody createValidPersonReqBody(){
+        return PersonPostReqBody.builder()
+                .cpf("1166598562")
+                .rg("5789922")
+                .email("fgfff@gmail.com")
+                .name("krokv")
                 .build();
     }
 
