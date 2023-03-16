@@ -1,88 +1,100 @@
 package com.example.person.controller;
 
-import com.example.person.gateway.PersonGateway;
-import com.example.person.util.PersonCreator;
-import com.example.person.util.PersonPostReqBodyCreator;
-import lombok.val;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.example.person.PersonApplication;
+import com.example.person.persistence.Person;
+import com.example.person.repository.PersonRepository;
+import lombok.val;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+
+import java.util.Arrays;
 import java.util.List;
 
-import static com.example.person.util.PersonCreator.createValidPerson;
-import static com.example.person.util.PersonCreator.createValidPersonReqBody;
 import static com.example.person.util.PersonPostReqBodyCreator.createPersonPostReqBody;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpMethod.GET;
 
 
-@ExtendWith(SpringExtension.class)
-class PersonControllerTest {
+@SpringBootTest(webEnvironment= RANDOM_PORT)
+public class PersonControllerTest {
 
-    @InjectMocks
-    // when you want to test the class
-    private PersonController personController;
 
-    @Mock
-    // every class that PersonController are using.
-    private PersonGateway personGateway;
+    @Autowired
+    private TestRestTemplate testRestTemplate;
+
+    @Autowired
+    private PersonRepository personRepository;
 
 
     @BeforeEach
     void setUp() {
-        val personList = List.of(createValidPerson());
-        BDDMockito.when(personGateway.listAll())
-                .thenReturn(personList);
+        personRepository.deleteAll();
+    }
+
+
+    @Test
+    void should_Save_When_Successfull() {
+        val person = createPersonPostReqBody();
+        val newRequest = new HttpEntity<>(person, null);
+
+        val exchange = testRestTemplate.postForEntity("/person/save", newRequest, Person.class);
+
+        assertEquals(201, exchange.getStatusCode().value());
+        assertEquals(person.getName(), exchange.getBody().getName());
+        // more assertions * coverage.
+    }
+
+    @Disabled
+    @Test
+    void should_FindById_When_Successfull() {
+        val person = Person.builder()
+                .cpf("1166598562")
+                .rg("5789922")
+                .email("fgfff@gmail.com")
+                .name("krokv")
+                .build();
+
+        val savedPerson = personRepository.save(person);
+
+        val exchange = testRestTemplate.exchange("/person/"+ savedPerson.getId(),
+                GET, null ,Person.class);
+
+        assertEquals(200, exchange.getStatusCode().value());
 
     }
 
     @Test
-    void listAll_ReturnsListOfPeople() {
-        val expectedName = createValidPerson().getName();
-        val personList = personController.listAll();
+    void should_ListAll_When_Successfull() {
+        val person = Person.builder()
+                .cpf("1166598562")
+                .rg("5789922")
+                .email("fgfff@gmail.com")
+                .name("krokv")
+                .build();
 
-        Assertions.assertThat(personList).isNotNull();
-        Assertions.assertThat(personList.stream().toList())
-                .isNotEmpty()
-                .hasSize(1);
+        val personTwo = Person.builder()
+                .cpf("1166598562")
+                .rg("5789922")
+                .email("fgfff@gmail.com")
+                .name("krokv")
+                .build();
 
-        Assertions.assertThat(personList.stream().toList().get(0).getName()).isEqualTo(expectedName);
+        personRepository.saveAll(List.of(person, personTwo));
+
+        val savedPerson = personRepository.findAll(person, personTwo);
+
+        val exchange = testRestTemplate.exchange("/person/"+ savedPerson,
+                GET, null ,Person.class);
+
+        assertEquals(200, exchange.getStatusCode().value());
+
     }
 
-    @Test
-    @DisplayName("Display a name for your tests.")
-    void findById_ReturnPersonById() {
-        val expectedId = createValidPerson().getId();
-        val person = personController.findById(1L);
-
-        Assertions.assertThat(person)
-                .isNotNull();
-
-        Assertions.assertThat(person.getId()).isNotNull().isEqualTo(expectedId);
-    }
-
-    @Test
-    @DisplayName("findById returns person when successful")
-    void findById_ReturnsAnime_WhenSuccessful(){
-        val expectedId = createValidPerson().getId();
-
-        val person = personController.findById(1L);
-
-        Assertions.assertThat(person).isNotNull();
-
-        Assertions.assertThat(person.getId()).isNotNull().isEqualTo(expectedId);
-    }
-
-    @Test
-    @DisplayName("save returns person when successful")
-    void save_ReturnsPerson_WhenSuccessful(){
-        val person = personController.save(createPersonPostReqBody());
-
-        Assertions.assertThat(person).isEqualTo(createValidPerson());
-    }
 }

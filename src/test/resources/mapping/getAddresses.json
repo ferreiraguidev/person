@@ -1,0 +1,20 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "http://localhost:8080/1"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      {
+        "street": "Rua C-299",
+        "city": "Goiania",
+        "personId": 1,
+        "cep": "74363180"
+      }
+    ]
+  }
+}
