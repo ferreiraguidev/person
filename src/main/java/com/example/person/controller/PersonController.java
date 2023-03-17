@@ -29,19 +29,19 @@ public class PersonController {
 
     @ResponseStatus(OK)
     @GetMapping("person/{id}")
-    public PersonRespBody findById(@PathVariable Long id) {
+    public PersonRespBody findById(@PathVariable final  Long id) {
         return findAddressesById.execute(id);
     }
 
     @ResponseStatus(CREATED)
     @PostMapping("person/save")
-    public Person save(@RequestBody PersonPostReqBody personPostReqBody) {
+    public Person save(@RequestBody final PersonPostReqBody personPostReqBody) {
         return personGateway.save(PersonMapper.personToModel(personPostReqBody));
     }
 
     @ResponseStatus(OK)
     @GetMapping("person/find/{id}")
-    public PersonRespBody findPersonById(@PathVariable Long id) {
+    public PersonRespBody findPersonById(@PathVariable final Long id) {
         return PersonMapper.personToDto(personGateway.findById(id));
     }
 }

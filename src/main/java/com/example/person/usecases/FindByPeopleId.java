@@ -18,8 +18,8 @@ public class FindByPeopleId {
 
 
     public PersonRespBody execute(final Long id) {
-        var addresses = addressClient.listAllAddresses(id);
-        var person = personService.findById(id);
+        final var addresses = addressClient.listAllAddresses(id);
+        final var person = personService.findById(id);
         return PersonMapper.personToDtoWithAddresses(person, addresses);
     }
 }

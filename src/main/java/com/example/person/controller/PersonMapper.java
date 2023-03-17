@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PersonMapper {
 
-    public static PersonRespBody personToDto(Person person) {
+    public static PersonRespBody personToDto(final Person person) {
         return PersonRespBody.builder()
                 .id(person.getId())
                 .cpf(person.getCpf())
@@ -21,7 +21,7 @@ public class PersonMapper {
                 .build();
     }
 
-    public static Person personToModel(PersonPostReqBody personPostReqBody) {
+    public static Person personToModel(final PersonPostReqBody personPostReqBody) {
         return Person.builder()
                 .cpf(personPostReqBody.getCpf())
                 .name(personPostReqBody.getName())
@@ -30,7 +30,8 @@ public class PersonMapper {
                 .build();
     }
 
-    public static PersonRespBody personToDtoWithAddresses(Person person, List<AddressRespBody> addressRespBody) {
+    public static PersonRespBody personToDtoWithAddresses(final Person person,
+                                                          final List<AddressRespBody> addressRespBody) {
         return PersonRespBody.builder()
                 .id(person.getId())
                 .cpf(person.getCpf())
@@ -38,7 +39,6 @@ public class PersonMapper {
                 .rg(person.getRg())
                 .email(person.getEmail())
                 .addresses(addressRespBody)
-                // that was missing a list [];
                 .build();
     }
 }

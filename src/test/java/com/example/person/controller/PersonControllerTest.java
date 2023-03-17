@@ -1,7 +1,6 @@
 package com.example.person.controller;
 
 
-import com.example.person.PersonApplication;
 import com.example.person.persistence.Person;
 import com.example.person.repository.PersonRepository;
 import lombok.val;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.example.person.util.PersonPostReqBodyCreator.createPersonPostReqBody;
@@ -22,7 +20,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.HttpMethod.GET;
 
 
-@SpringBootTest(webEnvironment= RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 public class PersonControllerTest {
 
 
@@ -63,8 +61,8 @@ public class PersonControllerTest {
 
         val savedPerson = personRepository.save(person);
 
-        val exchange = testRestTemplate.exchange("/person/"+ savedPerson.getId(),
-                GET, null ,Person.class);
+        val exchange = testRestTemplate.exchange("/person/" + savedPerson.getId(),
+                GET, null, Person.class);
 
         assertEquals(200, exchange.getStatusCode().value());
 
@@ -86,12 +84,12 @@ public class PersonControllerTest {
                 .name("krokv")
                 .build();
 
-        personRepository.saveAll(List.of(person, personTwo));
+        val people = personRepository.saveAll(List.of(person, personTwo));
 
-        val savedPerson = personRepository.findAll(person, personTwo);
+//        val savedPerson = personRepository.findAll(person, personTwo);
 
-        val exchange = testRestTemplate.exchange("/person/"+ savedPerson,
-                GET, null ,Person.class);
+        val exchange = testRestTemplate.exchange("/person/" + people.toArray(),
+                GET, null, Person.class);
 
         assertEquals(200, exchange.getStatusCode().value());
 
